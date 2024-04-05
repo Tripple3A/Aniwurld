@@ -127,7 +127,7 @@ header .navigation .navigation-items a:hover:before {
 
                         <div class="col-lg-12 col-12">
                             <div class="text-center mb-5 pb-2">
-                                <h1 class="text-white">Unite with Fellow Anime Enthusiasts </h1>
+                                <h1 class="text-white"> with Fellow Anime Enthusiasts </h1>
 
                                 <p class="text-white">Where passion meets friendships</p>
 

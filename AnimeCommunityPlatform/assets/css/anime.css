@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: black;
+    color:#fff;
+}
+
+header {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 200px;
+    transition: 0.5s ease;
+    background-color: #41403d; /* Added background color */
+}
+
+header .brand {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+header .brand:hover {
+    color: #09a6d4;
+}
+
+header .navigation {
+    position: relative;
+}
+
+header .navigation .navigation-items a {
+    position: relative;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 30px;
+    transition: 0.3s ease;
+}
+
+header .navigation .navigation-items a:before {
+    content: '';
+    position: absolute;
+    background: #fff;
+    width: 0;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    transition: 0.3s ease;
+}
+
+header .navigation .navigation-items a:hover:before {
+    width: 100%;
+    background: #09a6d4;
+}
+
+
+.anime-details-container{
+    padding: 3rem 18rem;
+    background-color: #EDEDED;
+
+
+}
+
+.details{
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 5px solid #e5e7eb;
+    color:black;
+}
+    .detail{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        img{
+            border-radius: 7px;
+        }
+    }
+    .anime-details{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        p{
+            display: flex;
+            gap: 1rem;
+        }
+        p span:first-child{
+            font-weight: 600;
+            color: #454e56;
+        }
+    }
+
+    h1{
+        display: inline-block;
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        background:linear-gradient( to right, #A855F7, #27AE60);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all .4s ease-in-out;
+        &:hover{
+            transform: skew(-3deg);
+        }
+    }
+    .title{
+        display: inline-block;
+        margin: 3rem 0;
+        font-size: 2rem;
+        cursor: pointer;
+        background:linear-gradient( to right, #A855F7 23%, #27AE60);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dropdown-menu {
+        width: 18rem;
+        /* Adjust this to your desired width */
+        padding: 15px;
+        /* Adjust this to your desired padding */
+    }
+    
+    .form-check-label {
+        margin-left: 10px;
+    }
+    
+    #dropdownMenuButton1 {
+        margin-top: 20px; 
+    padding: 0.5rem 1rem;
+    outline: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    background-color:plum;
+    cursor: pointer;
+    transition: all .4s ease-in-out;
+    font-family: inherit;
+    border: 2px solid #e5e7eb;
+    }
+
+    #dropdownMenuButton1:hover {
+        background-color:lightblue;
+        color: #fff; /* Change text color to white for better visibility */
+    }
+
+    .characters{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 2rem;
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 20px;
+        border: 5px solid #e5e7eb;
+    }
+        .character{
+            padding: .4rem .6rem;
+            border-radius: 7px;
+            background-color: #EDEDED;
+            transition: all .4s ease-in-out;
+        }
+            .character img{
+                width: 100%;
+            }
+            .character h4{
+                padding: .5rem 0;
+                color: #454e56;
+            }
+            .character p{
+                color: #27AE60;
+            }
+            .character &:hover{
+                transform: translateY(-5px);
+            }
+
+
+        
+
