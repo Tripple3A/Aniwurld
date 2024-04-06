@@ -1,3 +1,10 @@
+<?php
+// Including the core.php file for session checking
+include '../settings/core.php';
+include '../functions/all_categories_fxn.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +23,7 @@
                 <div class="navigation-items">
                     <a href="#">Home</a>
                     <a href="#">Discover</a>
-                    <a href="#">Categories</a>
+                    <a href="#">Library</a>
                     <a href="#">Profile</a>
                     <a href="#">Awards</a>
                     <a href="#">Connect</a>
@@ -62,15 +69,17 @@
                 echo "<p><span>Duration:</span><span>{$anime['duration']}</span></p>";
                 echo "</div>";
 
-                echo "<div class='dropdown mt-3'>";
-                echo "<button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton1' data-bs-toggle='dropdown' aria-expanded='false'>
-                        Add to Categories
-                    </button>";
-                echo "<ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
-                        
-                    </ul>";
-                echo "</div>";
-                echo "</div>";
+                echo "<div class='dropdown'>";
+        echo "<button class='dropbtn'>Add to Categories</button>";
+        echo "<div class='dropdown-content'>";
+        // Looping through the existing categories to build the options
+        foreach ($var_data as $data) {
+            echo "<a class='dropdown-item' href='../actions/update_category.php?id={$data['category']}&anime_id={$animeId}'>{$data['category']}</a>";
+        }
+            echo "</div>";
+        echo "</div>";
+            echo "</div>";
+
 
                 echo "<h3 class='title'>Trailer</h3>";
                 echo "<div class='trailer-con'>";
