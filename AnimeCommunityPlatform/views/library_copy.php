@@ -1,6 +1,9 @@
 <?php
+
 // Including the core.php file for session checking
 include '../settings/core.php';
+include '../functions/all_categories_fxn.php';
+include '../actions/get_each_category.php';
 
 ?>
 
@@ -214,6 +217,22 @@ header .navigation .navigation-items a:hover:before {
             font-size: 15px;
             line-height: 1.8;
         }
+
+        .review-btn {
+            border: none;
+            padding: 8px 15px;
+            display: block;
+            margin: 5px auto;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid #292929;
+            margin-bottom: 40px;
+            background-color: #fff;
+        }
+        .review-btn:hover {
+            background: #f6f6f6;
+        }
         .read-btn {
             border: none;
             padding: 8px 15px;
@@ -224,6 +243,7 @@ header .navigation .navigation-items a:hover:before {
             cursor: pointer;
             border: 1px solid #292929;
             margin-bottom: 40px;
+            background-color: #fff;
         }
         .read-btn:hover {
             background: #f6f6f6;
@@ -253,6 +273,46 @@ header .navigation .navigation-items a:hover:before {
         .active {
             background: #f0544f;
         }
+
+
+        /* CSS styles for the review form */
+#review-form {
+    margin-top: 20px;
+}
+
+#submit-review-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#review-text {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+#review-text:focus {
+    outline: none;
+    border-color: #09a6d4;
+}
+
+#submit-review-form input[type="submit"] {
+    background-color: #09a6d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submit-review-form input[type="submit"]:hover {
+    background-color: #07a2cf;
+}
+
     </style>
     <body>
 
@@ -279,67 +339,105 @@ header .navigation .navigation-items a:hover:before {
             <p>Organize Your Anime Journey!!</p>
             <div class = "filter-container">
                 <div class = "category-head">
-                    <ul>
-                        <div class = "category-title active" id = "all">
-                            <li>Watching</li>
-                            <span><i class = "fas fa-border-all"></i></span>
-                        </div>
-                        <div class = "category-title" id = "culture">
-                            <li>Want to Watch</li>
-                            <span><i class = "fas fa-theater-masks"></i></span>
-                        </div>
-                        <div class = "category-title" id = "politics">
-                            <li>Watched</li>
-                            <span><i class = "fas fa-landmark"></i></span>
-                        </div>
-                        <div class = "category-title" id = "politics">
+                <ul>
+                    <?php
+                    // Loop through categories retrieved from the database
+                    foreach ($var_data as $category) {
+                        echo '<div class="category-title" data-category="' . $category['category'] . '">';
+                        echo '<li>' . $category['category'] . '</li>';
+                        echo '<span><i class="fas fa-theater-masks"></i></span>';
+                        echo '</div>';
+                    }
+                    ?>
+
+                <div class = "category-title" id = "politics">
                             <li>Add a category</li>
                             <span><i class = "fas fa-landmark"></i></span>
-                        </div>
-                        
-                    </ul>
+              </div>
+                </ul>
                 </div>
 
                 <div class = "posts-collect">
-                    <div class = "posts-main-container">
-                        <!-- single post -->
-                        <div class = "all business">
-                            <div class = "post-img">
-                                <img src = "../assets/images/signin-image.jpg" alt = "post">
-                                <span class = "category-name">Rate</span>
-                            </div>
-
-                            <div class = "post-content">
-                                <div class = "post-content-top">
-                                    <span><i class = "fas fa-calendar"></i>Reviews</span>
-                                    <span>
-                                        <i class = "fas fa-comment"></i>34
-                                    </span>
-                                </div>
-                                <h2>Lorem ipsum dolor sit amet</h2>
-                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                     Accusamus recusandae aspernatur possimus illum, repellat 
-                                     ad quasi earum, illo voluptatibus minima fugiat saepe magni 
-                                     corporis vero eius accusantium quidem, consectetur nesciunt!
-                                     noun. knowledge communicated or received concerning a particular fact or circumstance; news: 
-                                     information concerning a crime. knowledge gained through study, 
-                                     communication, research, instruction, etc.; factual data: His wealth of
-                                      general information is amazing.noun. knowledge communicated or received concerning a particular fact or circumstance; news: information concerning a crime. knowledge gained through study, communication, research, instruction, etc.; 
-                                      factual data: His wealth of general information is amazing.</p>
-                                      <div><button type = "button" class = "read-btn">Review</button>
-                                      <button type = "button" class = "read-btn">Rate</button>
-                                    </div>
-                            </div>
-                            
-                        </div>
-                        <!-- end of single post -->
+                    <div id= "anime-container" class = "posts-main-container">
+                         <!-- Anime details will be populated here -->
                         
                     </div>
                 </div>
             </div>
         </div>
+
+
+        <!--Hidden review form-->
+        <!-- Hidden review form -->
+<div id="review-form" style="display: none;">
+    <form id="submit-review-form">
+        <textarea id="review-text" name="review-text" placeholder="Write your review"></textarea>
+        <input type="hidden" id="anime-id" name="anime-id" value="">
+        <input type="submit" value="Submit Review">
+    </form>
+</div>
+
         
 
-        <!-- JS file -->
+       <!-- JS file -->
+       <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+ 
+    <script>
+        $(document).ready(function () {
+            // Function to fetch anime details based on category
+            function fetchAnimeByCategory(category) {
+                
+                $.ajax({
+                    type: "GET",
+                    url: "../actions/get_each_category.php",
+                    data: { id: category },
+                    success: function (response) {
+                        
+                        $('#anime-container').html(response); // Populate anime details
+                    }
+                });
+            }
+
+            // Click event for category titles
+            $('.category-title').click(function () {
+                $('.category-title').removeClass('active'); // Remove active class from all categories
+                $(this).addClass('active'); // Add active class to the clicked category
+                var category = $(this).data('category'); // Get the category
+                fetchAnimeByCategory(category); // Fetch anime details based on category
+            });
+
+
+        //For popping up the review form
+        $('.review-btn').click(function() {
+            console.log("hello");
+        var animeId = $(this).data('animeid');
+        
+        $('#anime-id').val(animeId); // Set anime id in the hidden input field
+        $('#review-form').show();
+    });
+
+    // Submit review form via AJAX
+    $('#submit-review-form').submit(function(e) {
+        e.preventDefault();
+        var formData = $(this).serialize(); // Serialize form data
+        $.ajax({
+            type: "POST",
+            url: "../actions/submit_review.php", // Replace with the path to your PHP script for submitting reviews
+            data: formData,
+            success: function(response) {
+                // Optionally, handle success response (e.g., display a success message)
+                console.log("Review submitted successfully");
+                // Hide review form after submission
+                $('#review-form').hide();
+            },
+            error: function(xhr, status, error) {
+                // Optionally, handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+        });
+    </script>
+        
         
 </html>
