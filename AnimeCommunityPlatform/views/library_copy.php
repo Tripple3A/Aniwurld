@@ -427,6 +427,9 @@ header .navigation .navigation-items a:hover:before {
 $(document).on('click', '.review-btn', function() {
     var animeId = $(this).data('animeid');
     $('#anime-id').val(animeId); // Set anime id in the hidden input field
+    // Clear the form fields before showing the review form
+    $('#review-form').find('textarea').val('');
+
     $('#review-form').show(); // Show review form
 });
 
