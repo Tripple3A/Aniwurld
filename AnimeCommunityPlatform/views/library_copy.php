@@ -720,7 +720,8 @@ $(document).on('submit', '#add-form', function(e) {
                 console.log(response);
                 var newCategory = JSON.parse(response);
                 // Dynamically append the new category to the category list
-                $('.category-head ul').append('<div class="category-title" data-category="' + newCategory.name + '"><li>' + newCategory.name + '</li><span><i class="fas fa-theater-masks"></i></span></div>');
+                $('.category-head ul').append('<div class="category-title" data-category="' + newCategory.name + '"><li>' + newCategory.name + '</li><span><a class="delete" title="Delete" data-toggle="tooltip" href="#" data-category="' + newCategory.name + '"><i class="fa fa-trash"></i></a></span></div>');
+
             },
             error: function(xhr, status, error) {
                 // Optionally, handle error response
@@ -745,6 +746,7 @@ $(document).on('click', '.delete', function(e) {
         url: "../actions/delete_a_category.php",
         data: { category: category }, // Send category name to backend
         success: function(response) {
+            console.log(response);
             // Remove the deleted category from the frontend
             $('.category-title[data-category="' + category + '"]').remove();
             console.log("Category deleted successfully");
