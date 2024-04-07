@@ -64,7 +64,7 @@ function getAnimeIdByCategory($categoryName) {
         
 
         // You can customize this HTML markup according to your requirements
-        $anime_details .= '<div class="all business">';
+        $anime_details .= '<div id="anime-' . $anime_id . '" class="all business">';
         $anime_details .= '<div class="post-img">';
         
         
@@ -83,8 +83,8 @@ function getAnimeIdByCategory($categoryName) {
         // Adjust accordingly if the structure differs
         $anime_details .= $reviews_html;
         $anime_details .= '<div class="btns"><button type="button" class="review-btn" data-animeid="' . $anime_id . '">Review</button>';
-        $anime_details .= '<button type="button" class="read-btn">Delete from category</button>';
-        $anime_details .= '<button type="button" class="read-btn">Change category</button></div>';
+        $anime_details .= '<button type="button" class="delete-btn" data-animeid="' . $anime_id . '">Delete from category</button>';
+        $anime_details .= '<button type="button" class="read-btn" data-animeid="' . $anime_id . '">Change category</button></div>';
         $anime_details .= '</div></div>';
     }
 

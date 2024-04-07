@@ -233,6 +233,21 @@ header .navigation .navigation-items a:hover:before {
         .review-btn:hover {
             background: #f6f6f6;
         }
+        .delete-btn {
+            border: none;
+            padding: 8px 15px;
+            display: block;
+            margin: 5px auto;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid #292929;
+            margin-bottom: 40px;
+            background-color: #fff;
+        }
+        .delete-btn:hover {
+            background: #f6f6f6;
+        }
         .read-btn {
             border: none;
             padding: 8px 15px;
@@ -470,6 +485,31 @@ $(document).on('submit', '#submit-review-form', function(e) {
     });
 
     </script>
+
+
+
+<script>
+    //click event for the delete button
+    $(document).on('click', '.delete-btn', function() {
+    var animeId = $(this).data('animeid');
+    // Send AJAX request to delete the anime from the category
+    $.ajax({
+        type: "POST",
+        url: "../actions/delete_category.php",
+        data: { anime_id: animeId },
+        success: function(response) {
+            // Remove the corresponding anime content from the page
+            $('#anime-' + animeId).remove();
+            console.log("Anime deleted from category successfully");
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+
+    </script>
+    </body>
         
         
 </html>
