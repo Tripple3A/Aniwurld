@@ -96,7 +96,6 @@ CREATE TABLE `reviews` (
   `user_id` int(11) NOT NULL,
   `anime_id` int(11) NOT NULL,
   `ReviewText` text DEFAULT NULL,
-  `Rating` int(11) DEFAULT NULL CHECK (`Rating` >= 0 and `Rating` <= 5),
   `ReviewDate` date DEFAULT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

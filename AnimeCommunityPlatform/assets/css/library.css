@@ -61,12 +61,14 @@ body{
 
 /** single post **/
 .posts-main-container{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 40px;
+    display:flex;
+    flex-direction: column;
 }
 .posts-main-container > div{
     box-shadow: 0px 8px 22px -12px rgba(0, 0, 0, 0.64);
+    margin-bottom: 40px; /* Add margin between each anime content */
+    width:50%;
+    
 }
 .post-img{
     position: relative;
@@ -81,6 +83,8 @@ body{
     padding: 4px 10px;
     border-radius: 2px;
 }
+
+
 .business .category-name{
     background: #00a7ea;
 }

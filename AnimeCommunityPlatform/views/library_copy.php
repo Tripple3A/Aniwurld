@@ -276,6 +276,19 @@ header .navigation .navigation-items a:hover:before {
 
 
         /* CSS styles for the review form */
+
+        #review-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 9999;
+}
 #review-form {
     margin-top: 20px;
 }
@@ -368,12 +381,11 @@ header .navigation .navigation-items a:hover:before {
 
 
         <!--Hidden review form-->
-        <!-- Hidden review form -->
 <div id="review-form" style="display: none;">
-    <form id="submit-review-form">
+    <form id="submit-review-form" >
         <textarea id="review-text" name="review-text" placeholder="Write your review"></textarea>
         <input type="hidden" id="anime-id" name="anime-id" value="">
-        <input type="submit" value="Submit Review">
+        <input type="submit" name="submit-review">
     </form>
 </div>
 
@@ -405,38 +417,55 @@ header .navigation .navigation-items a:hover:before {
                 var category = $(this).data('category'); // Get the category
                 fetchAnimeByCategory(category); // Fetch anime details based on category
             });
+        });
+    </script>
 
 
-        //For popping up the review form
-        $('.review-btn').click(function() {
-            console.log("hello");
-        var animeId = $(this).data('animeid');
-        
-        $('#anime-id').val(animeId); // Set anime id in the hidden input field
-        $('#review-form').show();
+<!--To handle the pop up form for review-->
+<script>
+// Event delegation for dynamically generated review buttons
+$(document).on('click', '.review-btn', function() {
+    var animeId = $(this).data('animeid');
+    $('#anime-id').val(animeId); // Set anime id in the hidden input field
+    $('#review-form').show(); // Show review form
+});
+
+//Submit review form via AJAX
+$(document).on('submit', '#submit-review-form', function(e) {
+    
+   e.preventDefault();
+   var formData = $(this).serialize(); // Serialize form data
+    $.ajax({
+        type: "POST",
+        url: "../actions/submit_review.php",
+        data: formData,
+       success: function(response) {
+             //Optionally, handle success response
+            console.log("Review submitted successfully");
+            $('#review-form').hide(); // Hide review form after submission
+        },
+        error: function(xhr, status, error) {
+           // Optionally, handle error response
+           console.error(xhr.responseText);
+        }
     });
 
-    // Submit review form via AJAX
-    $('#submit-review-form').submit(function(e) {
-        e.preventDefault();
-        var formData = $(this).serialize(); // Serialize form data
+
+    // Fetch updated anime details and reviews HTML
+    var category = $('.category-title.active').data('category'); // Get the active category
         $.ajax({
-            type: "POST",
-            url: "../actions/submit_review.php", // Replace with the path to your PHP script for submitting reviews
-            data: formData,
+            type: "GET",
+            url: "../actions/get_each_category.php",
+            data: { id: category },
             success: function(response) {
-                // Optionally, handle success response (e.g., display a success message)
-                console.log("Review submitted successfully");
-                // Hide review form after submission
-                $('#review-form').hide();
+                $('#anime-container').html(response); // Update anime details and reviews section
             },
             error: function(xhr, status, error) {
-                // Optionally, handle error response
                 console.error(xhr.responseText);
             }
         });
     });
-        });
+
     </script>
         
         

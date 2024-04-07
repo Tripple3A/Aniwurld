@@ -16,6 +16,13 @@ function getAnimeIdByCategory($categoryName) {
     // Retrieve the id of the user currently logged in
     $userId = $_SESSION['user_id'];
 
+
+    //retrieving the username using userid from users table
+    $sql = "SELECT * FROM users WHERE user_id = '$userId'";
+    $result = mysqli_query($connection, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $username = $row['username'];
+
     // Retrieve the category id from the categories table
     $query = "SELECT category_id FROM categories WHERE category = '$categoryName'";
     $result = mysqli_query($connection, $query);
@@ -45,20 +52,15 @@ function getAnimeIdByCategory($categoryName) {
         $reviews_query = "SELECT * FROM reviews WHERE anime_id = '$anime_id'";
         $reviews_result = mysqli_query($connection, $reviews_query);
 
-        // Build reviews HTML
-        $reviews_html = '';
-        while ($review_row = mysqli_fetch_assoc($reviews_result)) {
-            $user_id = $review_row['user_id'];
-            $review_text = $review_row['ReviewText'];
-            // Fetch username of the user who gave the review
-            $user_query = "SELECT username FROM users WHERE user_id = '$user_id'";
-            $user_result = mysqli_query($connection, $user_query);
-            $user_data = mysqli_fetch_assoc($user_result);
-            $username = $user_data['username'];
 
+        $reviews_html = '';
+        // Build reviews HTML
+        
+        while ($review_row = mysqli_fetch_assoc($reviews_result)) {
             // Append review to HTML
-            $reviews_html .= "<p>$username: $review_text</p>";
+            $reviews_html .= "<p>{$username}: {$review_row['ReviewText']}</p>";
         }
+        
         
 
         // You can customize this HTML markup according to your requirements
@@ -80,12 +82,16 @@ function getAnimeIdByCategory($categoryName) {
         // You need to ensure 'description' exists in 'animes' table
         // Adjust accordingly if the structure differs
         $anime_details .= $reviews_html;
-        $anime_details .= '<button type="button" class="review-btn" data-animeid="' . $anime_id . '">Review</button>';
-        $anime_details .= '<button type="button" class="read-btn">Rate</button></div>';
+        $anime_details .= '<div class="btns"><button type="button" class="review-btn" data-animeid="' . $anime_id . '">Review</button>';
+        $anime_details .= '<button type="button" class="read-btn">Delete from category</button>';
+        $anime_details .= '<button type="button" class="read-btn">Change category</button></div>';
         $anime_details .= '</div></div>';
     }
 
-    return $anime_details;
+    // Combine anime details and reviews HTML
+    $anime_details_with_reviews = $anime_details;
+
+    return $anime_details_with_reviews;
 }
 
 // Usage 
