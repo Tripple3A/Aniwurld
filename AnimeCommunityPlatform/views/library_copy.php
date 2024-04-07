@@ -3,7 +3,7 @@
 // Including the core.php file for session checking
 include '../settings/core.php';
 include_once '../functions/all_categories_fxn.php';
-include '../actions/get_each_category.php';
+include_once '../actions/get_each_category.php';
 
 ?>
 
@@ -145,6 +145,27 @@ header .navigation .navigation-items a:hover:before {
             padding: 0 10px;
         }
         .category-title span {
+            color: #222;
+        }
+
+        .category-add {
+            flex: 0 0 calc(16.6667% - 10px);
+            display: flex;
+            justify-content: center;
+            background: #a8a8a8;
+            padding: 12px;
+            color: #fff;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        .category-add:hover {
+            opacity: 0.7;
+        }
+        .category-add li {
+            padding: 0 10px;
+        }
+        .category-add span {
             color: #222;
         }
 
@@ -401,6 +422,58 @@ header .navigation .navigation-items a:hover:before {
     background-color: #07a2cf;
 }
 
+/*Css for adding a category form*/
+ 
+
+ #add-category-form{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 9999;
+}
+#add-category-form {
+    margin-top: 20px;
+}
+
+#add-form{
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#add-text {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+#add-text:focus {
+    outline: none;
+    border-color: #09a6d4;
+}
+
+#add-form input[type="submit"] {
+    background-color: #09a6d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#add-form input[type="submit"]:hover {
+    background-color: #07a2cf;
+}
+
     </style>
     <body>
 
@@ -433,12 +506,14 @@ header .navigation .navigation-items a:hover:before {
                     foreach ($var_data as $category) {
                         echo '<div class="category-title" data-category="' . $category['category'] . '">';
                         echo '<li>' . $category['category'] . '</li>';
-                        echo '<span><i class="fas fa-theater-masks"></i></span>';
+                        // Modify the delete icon to include a data attribute for category name -->
+                        echo '<span><a class="delete" title="Delete" data-toggle="tooltip" href="#" data-category="' . $category['category'] . '"><i class="fa fa-trash"></i></a></span>';
+
                         echo '</div>';
                     }
                     ?>
 
-                <div class = "category-title" id = "politics">
+                <div class = "category-add" id = "adding-category">
                             <li>Add a category</li>
                             <span><i class = "fas fa-landmark"></i></span>
               </div>
@@ -461,6 +536,15 @@ header .navigation .navigation-items a:hover:before {
         <textarea id="review-text" name="review-text" placeholder="Write your review"></textarea>
         <input type="hidden" id="anime-id" name="anime-id" value="">
         <input type="submit" name="submit-review">
+    </form>
+</div>
+
+
+<!--Hidden form for adding a category-->
+<div id="add-category-form" style="display: none;">
+    <form id="add-form" >
+        <textarea id="add-text" name="add-text" placeholder="Name of category"></textarea>
+        <input type="submit" name="submit-category">
     </form>
 </div>
 
@@ -606,6 +690,70 @@ $('.btn-dropdown-container').hover(function () {
     $(this).find('.category-dropdown').css('display', 'none');
 });
 
+
+
+</script>
+
+
+<!--To handle the pop up form for adding a category-->
+<script>
+// Event delegation for dynamically generated review buttons
+$(document).on('click', '.category-add', function() {
+    // Clear the form fields before showing the review form
+    $('#add-category-form').find('textarea').val('');
+
+    $('#add-category-form').show(); // Show review form
+});
+
+// Submit category form via AJAX
+$(document).on('submit', '#add-form', function(e) {
+        e.preventDefault();
+        var formData = $(this).serialize(); // Serialize form data
+        $.ajax({
+            type: "POST",
+            url: "../actions/add_a_category.php",
+            data: formData,
+            success: function(response) {
+                // Hide category form after submission
+                $('#add-category-form').hide();
+                // Parse JSON response to get the newly added category data
+                console.log(response);
+                var newCategory = JSON.parse(response);
+                // Dynamically append the new category to the category list
+                $('.category-head ul').append('<div class="category-title" data-category="' + newCategory.name + '"><li>' + newCategory.name + '</li><span><i class="fas fa-theater-masks"></i></span></div>');
+            },
+            error: function(xhr, status, error) {
+                // Optionally, handle error response
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    </script>
+
+
+
+<!--script for deleting a category-->
+<script>
+    // Click event for delete icon
+$(document).on('click', '.delete', function(e) {
+    e.preventDefault();
+    var category = $(this).data('category'); // Get the category name
+    // Send AJAX request to delete the category
+    $.ajax({
+        type: "POST",
+        url: "../actions/delete_a_category.php",
+        data: { category: category }, // Send category name to backend
+        success: function(response) {
+            // Remove the deleted category from the frontend
+            $('.category-title[data-category="' + category + '"]').remove();
+            console.log("Category deleted successfully");
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+});
 
 
 </script>

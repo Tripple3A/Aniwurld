@@ -42,7 +42,7 @@ CREATE TABLE `awards` (
   `award_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
   `anime_watched` int(11),
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -68,8 +68,8 @@ CREATE TABLE `user_animes` (
   `anime_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`, `anime_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
-  FOREIGN KEY (`category_id`) REFERENCES `categories`(`category_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`category_id`) REFERENCES `categories`(`category_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `reviews` (
   `anime_id` int(11) NOT NULL,
   `ReviewText` text DEFAULT NULL,
   `ReviewDate` date DEFAULT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -116,7 +116,7 @@ CREATE TABLE `profile` (
   `twitter` varchar(100) DEFAULT NULL,
   `facebook` varchar(100) DEFAULT NULL,
   `instagram` varchar(100) DEFAULT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -130,6 +130,10 @@ CREATE TABLE animes (
     image_url VARCHAR(255),
     title VARCHAR(255)
 );
+
+
+
+
 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

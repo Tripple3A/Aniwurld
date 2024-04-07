@@ -10,10 +10,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 
-
-
-
-
 function getAnimeIdByCategory($categoryName) {
     global $connection; // Assuming $connection is your database connection
 
@@ -95,7 +91,7 @@ function getAnimeIdByCategory($categoryName) {
         $anime_details .= '<div class="category-dropdown">';
         
         // Loop through the existing categories to build the options
-        include '../functions/all_categories_fxn.php';
+        include_once '../functions/all_categories_fxn.php';
         foreach ($var_data as $data) {
            
             $anime_details .= '<div class="dropdown-item" data-animeid="' . $anime_id . '" data-categoryname="' . $data['category'] . '">' . $data['category'] . '</div>';
