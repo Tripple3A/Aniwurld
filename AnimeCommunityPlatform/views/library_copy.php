@@ -2,7 +2,7 @@
 
 // Including the core.php file for session checking
 include '../settings/core.php';
-include '../functions/all_categories_fxn.php';
+include_once '../functions/all_categories_fxn.php';
 include '../actions/get_each_category.php';
 
 ?>
@@ -248,7 +248,7 @@ header .navigation .navigation-items a:hover:before {
         .delete-btn:hover {
             background: #f6f6f6;
         }
-        .read-btn {
+        .update-btn {
             border: none;
             padding: 8px 15px;
             display: block;
@@ -260,7 +260,7 @@ header .navigation .navigation-items a:hover:before {
             margin-bottom: 40px;
             background-color: #fff;
         }
-        .read-btn:hover {
+        .update-btn:hover {
             background: #f6f6f6;
         }
 
@@ -499,7 +499,9 @@ $(document).on('submit', '#submit-review-form', function(e) {
         data: { anime_id: animeId },
         success: function(response) {
             // Remove the corresponding anime content from the page
+            
             $('#anime-' + animeId).remove();
+
             console.log("Anime deleted from category successfully");
         },
         error: function(xhr, status, error) {

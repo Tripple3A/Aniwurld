@@ -2,6 +2,8 @@
 
 include "../settings/connection.php";
 
+
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -84,7 +86,16 @@ function getAnimeIdByCategory($categoryName) {
         $anime_details .= $reviews_html;
         $anime_details .= '<div class="btns"><button type="button" class="review-btn" data-animeid="' . $anime_id . '">Review</button>';
         $anime_details .= '<button type="button" class="delete-btn" data-animeid="' . $anime_id . '">Delete from category</button>';
-        $anime_details .= '<button type="button" class="read-btn" data-animeid="' . $anime_id . '">Change category</button></div>';
+        $anime_details .= '<button type="button" class="update-btn" data-animeid="' . $anime_id . '">Change category</button></div>';
+        $anime_details .= '<div class="category-dropdown" style="display: none;">';
+        $anime_details .= '<select class="category-select">';
+        // Loop through the existing categories to build the options
+        include '../functions/all_categories_fxn.php';
+        foreach ($var_data as $data) {
+        $anime_details .= "<option value='{$data['category']}'>{$data['category']}</option>";
+        }
+        $anime_details .= '</select>';
+        $anime_details .= '</div>';
         $anime_details .= '</div></div>';
     }
 
