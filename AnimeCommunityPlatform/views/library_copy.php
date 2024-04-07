@@ -190,10 +190,12 @@ header .navigation .navigation-items a:hover:before {
             background: #00a7ea;
         }
         .post-content {
+           position:relative; 
             padding: 25px;
             width: 48%;
             display: flex; /* Add this line */
-    flex-direction: column; /* Add this line to reset flex direction */
+            flex-direction: column; /* Add this line to reset flex direction */
+            
         }
         .post-content-top {
             background: #80ced7;
@@ -263,6 +265,64 @@ header .navigation .navigation-items a:hover:before {
         .update-btn:hover {
             background: #f6f6f6;
         }
+
+        /* Updated CSS for button and dropdown container */
+.btn-dropdown-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Show the dropdown menu on hover of the container */
+.btn-dropdown-container:hover .category-dropdown {
+    display: block;
+}
+
+
+        .category-dropdown {
+    display: none;
+    position: absolute; /* Change to absolute */
+    top: 100%; /* Position below the button */
+    left: 0; /* Align with the button */
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 500;
+}
+
+.dropdown-item {
+            flex: 0 0 calc(16.6667% - 10px);
+            display: flex;
+            justify-content: center;
+            background: #a8a8a8;
+            padding: 12px;
+            color: black;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        .dropdown-item:hover {
+            opacity: 0.7;
+        }
+        
+  
+  /* Links inside the dropdown 
+  .category-dropdown div {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }*/
+  
+  /* Change color of dropdown links on hover */
+  .category-dropdown div:hover {background-color: #f1f1f1}
+  
+  /* Show the dropdown menu on hover */
+.update-btn:hover + .category-dropdown {
+    display: block;
+}
+
+
+    
 
         /* Media queries */
         @media (max-width: 1170px) {
@@ -432,6 +492,34 @@ header .navigation .navigation-items a:hover:before {
                 var category = $(this).data('category'); // Get the category
                 fetchAnimeByCategory(category); // Fetch anime details based on category
             });
+
+
+            // Change event for category dropdown items
+        $(document).on('click', '.dropdown-item', function() {
+        $('.dropdown-item').removeClass('active');
+        $(this).addClass('active');
+        var animeId = $(this).data('animeid');
+        var newCategory = $(this).data('categoryname'); 
+        updateAnimeCategory(animeId, newCategory); // Call function to update category
+    });
+
+    // Function to update anime category via AJAX
+    function updateAnimeCategory(animeId, newCategory) {
+        
+        $.ajax({
+            type: "POST",
+            url: "../actions/change_category.php",
+            data: { anime_id: animeId, id: newCategory },
+            success: function(response) {
+                console.log(response);
+                // If category updated successfully, fetch updated anime list
+                fetchAnimeByCategory($('.category-title.active').data('category'));
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
         });
     </script>
 
@@ -458,8 +546,6 @@ $(document).on('submit', '#submit-review-form', function(e) {
         url: "../actions/submit_review.php",
         data: formData,
        success: function(response) {
-             //Optionally, handle success response
-            console.log("Review submitted successfully");
             $('#review-form').hide(); // Hide review form after submission
         },
         error: function(xhr, status, error) {
@@ -511,6 +597,24 @@ $(document).on('submit', '#submit-review-form', function(e) {
 });
 
     </script>
+
+<script>
+    // Updated jQuery to handle hover event on the container
+$('.btn-dropdown-container').hover(function () {
+    $(this).find('.category-dropdown').css('display', 'block');
+}, function () {
+    $(this).find('.category-dropdown').css('display', 'none');
+});
+
+
+
+</script>
+
+
+
+
+
+
     </body>
         
         
