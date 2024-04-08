@@ -21,12 +21,13 @@ include '../functions/all_categories_fxn.php';
         <div class="menu-btn">
             <div class="navigation">
                 <div class="navigation-items">
-                    <a href="#">Home</a>
-                    <a href="#">Discover</a>
-                    <a href="#">Library</a>
-                    <a href="#">Profile</a>
-                    <a href="#">Awards</a>
-                    <a href="#">Connect</a>
+                <a href="../views/home.php">Home</a>
+                    <a href="../views/discover.php">Discover</a>
+                    <a href="../views/library_copy.php">library</a>
+                    <a href="../views/profile.php">Profile</a>
+                    <a href="../views/awards_page.php">Awards</a>
+                    <a href="../views/connect.php">Connect</a>
+                    <a href="../login/logout.php">logout</a>
                 </div>
             </div>
         </div>
@@ -74,7 +75,8 @@ include '../functions/all_categories_fxn.php';
         echo "<div class='dropdown-content'>";
         // Looping through the existing categories to build the options
         foreach ($var_data as $data) {
-            echo "<a class='dropdown-item' href='../actions/update_category.php?id={$data['category']}&anime_id={$animeId}'>{$data['category']}</a>";
+            echo "<a class='dropdown-item' href='#' data-animeid='" . $animeId . "' data-categoryname='" . $data['category'] . "'>{$data['category']}</a>";
+
         }
             echo "</div>";
         echo "</div>";
@@ -129,6 +131,41 @@ include '../functions/all_categories_fxn.php';
         }
         ?>
     </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!--for selecting a category-->
+    <script>
+$(document).ready(function () {
+             // Change event for category dropdown items
+             $(document).on('click', '.dropdown-item', function() {
+        var animeId = $(this).data('animeid');
+        var newCategory = $(this).data('categoryname'); 
+        updateAnimeCategory(animeId, newCategory); // Call function to update category
+    });
+
+    // Function to update anime category via AJAX
+    function updateAnimeCategory(animeId, newCategory) {
+        console.log(animeId);
+        console.log(newCategory);
+        
+        $.ajax({
+            type: "POST",
+            url: "../actions/update_category.php",
+            data: { anime_id: animeId, id: newCategory },
+            success: function(response) {
+                console.log(response);
+                alert(response.success);
+                
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+});
+
+        </script>
 
 </body>
 </html>

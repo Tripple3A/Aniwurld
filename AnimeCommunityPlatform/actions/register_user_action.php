@@ -10,9 +10,9 @@ include ('../settings/connection.php');
 $errors = array();
 
 //*Receiving all input value from the form
-if(isset($_POST['signup'])){
+if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    echo "Received POST data:";
+    
     //receive all input values from the form
     
 
@@ -20,21 +20,45 @@ if(isset($_POST['signup'])){
     $username = mysqli_real_escape_string($connection, $_POST['username']);
     $psw = mysqli_real_escape_string($connection, $_POST['pass']);
     $psw2 = mysqli_real_escape_string($connection, $_POST['re-pass']);
-    
-    
 
 
-
-    
-    
+    // Check if checkbox is checked
+    $agreeTerm = isset($_POST['agree-term']) ? true : false;
     
     //form validation
     //adds corresponding error into errors array
-    if(empty($email)){$errors['email'] = "Email is required";}
-    if(empty($username)){$errors['username'] = "Username is required";}
-    if(empty($psw)){$errors['pass'] = "Password is required";}
-    if(empty($psw2)){$errors['re-pass'] = "Please confirm your password";}
-    
+    if(empty($email)) {
+        $errors['email'] = "Email is required";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Invalid email format";
+    }
+
+    if(empty($username)) {
+        $errors['username'] = "Username is required";
+    }elseif (!preg_match("/^[a-zA-Z]+$/", $username)) {
+        $errors['username'] = "Username can only contain letters";
+    }
+
+    if(empty($psw)) {
+        $errors['pass'] = "Password is required";
+    }else {
+        // Password is present, perform additional password validation
+        if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/", $psw)) {
+            $errors['pass'] = "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one lowercase letter";
+        }
+    }
+    if(empty($psw2)) {
+        $errors['re-pass'] = "Please confirm your password";
+    }else{
+        if($psw !== $psw2){
+            $errors['re-pass'] = "Passwords do not match";
+        }
+    }
+
+
+    if (!$agreeTerm) {
+        $errors['agree-term'] = "Please agree to the terms of service";
+    }
 
     
     //Checking whether the username exists or not
@@ -60,28 +84,16 @@ if(isset($_POST['signup'])){
 
     if($user){
         
-        $errors['email'] = "Email is required";
-        }
-
-    //Checking for more errors for validation purposes
-     if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/", $psw)) {
-            $errors['pass'] = "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one lowercase letter";
-        }
-    
-    
-    
-        if($psw !== $psw2){
-            $errors['re-pass'] = "Passwords do not match";
+        $errors['email'] = "Email already exists";
         }
 
     
-
 
 
     // Check if there are any errors in the $errors array
     if (!empty($errors)) {
         echo json_encode($errors);
-        exit;
+        exit();
     }
 
 
@@ -108,8 +120,7 @@ if(isset($_POST['signup'])){
             // Redirect to login_view page upon successful registration
             $success_message = 'Registration was successful!!';
             echo json_encode(array('success' => $success_message));
-            header("Location:../login/login.php");
-            exit();
+            
             
             
         } 

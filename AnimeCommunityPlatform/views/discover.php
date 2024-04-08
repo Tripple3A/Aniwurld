@@ -102,12 +102,13 @@ form {
         <div class="menu-btn">
             <div class="navigation">
                 <div class="navigation-items">
-                    <a href="#">Home</a>
-                    <a href="#">Discover</a>
-                    <a href="#">Categories</a>
-                    <a href="#">Profile</a>
-                    <a href="#">Awards</a>
-                    <a href="#">Connect</a>
+                <a href="../views/home.php">Home</a>
+                    <a href="../views/discover.php">Discover</a>
+                    <a href="../views/library_copy.php">library</a>
+                    <a href="../views/profile.php">Profile</a>
+                    <a href="../views/awards_page.php">Awards</a>
+                    <a href="../views/connect.php">Connect</a>
+                    <a href="../login/logout.php">logout</a>
                     
                 </div>
             </div>

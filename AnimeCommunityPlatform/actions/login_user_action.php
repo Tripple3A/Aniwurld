@@ -12,7 +12,8 @@ $errors = array();
 
 
 
-if(isset($_POST['signin'])){
+//*Receiving all input value from the form
+if ($_SERVER["REQUEST_METHOD"] == "POST"){
    
    
 
@@ -21,26 +22,48 @@ if(isset($_POST['signin'])){
     $password = mysqli_real_escape_string($connection, $_POST['your_pass']);
 
 
-        //Query to check if the user exists
-    $query = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($connection, $query);
-    $user = mysqli_fetch_assoc($result);
 
-    
-  
+     //Query to check if the user exists
+     $query = "SELECT * FROM users WHERE email = '$email'";
+     $result = mysqli_query($connection, $query);
+     $user = mysqli_fetch_assoc($result);
+ 
+     
+ 
+ 
+    //form validation
+    //adds corresponding error into errors array
+    if(empty($email)) {
+        $errors['email'] = "Email is required";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Invalid email format";
+    }else if(!$user){
+        $errors['email'] = "Email not registered";
+    }
 
-    if(!$user){
 
-            echo '<h2>No registered account found!!!</h2>';
-        
-            array_push($errors, "User not found!!");
-
-            header("Location:../login/register.php");
-            die();
+    if(empty($password)) {
+        $errors['your_pass'] = "Password is required";
+    }else {
+        // Password is present, perform additional password validation
+        if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/", $password)) {
+            $errors['your_pass'] = "Password must be at least 8 characters long and contain at least one number, one uppercase letter, and one lowercase letter";
         }
+    }
 
 
-        else{
+       
+
+
+        // Check if there are any errors in the $errors array
+    if (!empty($errors)) {
+        echo json_encode($errors);
+        exit();
+    }
+    else{
+
+
+        
 
             //User then exists
             //Retrieving the hashed password from the database
@@ -65,13 +88,14 @@ if(isset($_POST['signin'])){
                 $_SESSION['user_id'] = $user_id_value;
                 
 
-                //Leading the user to the dashboard
-                header("Location:../views/home.php");
+                $success_message = 'Login was successful!!';
+                echo json_encode(array('success' => $success_message));
                 
             }    
 
             }
         }
+        
 
 
 

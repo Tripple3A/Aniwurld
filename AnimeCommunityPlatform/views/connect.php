@@ -2,9 +2,13 @@
 // Including the core.php file for session checking
 include '../settings/core.php';
 
+
+// Including the get_all_users.php file
+include '../actions/get_all_users.php';
+
+// Fetch all users
+$users = getAllUsers();
 ?>
-
-
 <!doctype html>
 <html lang="en">
     <head>
@@ -114,12 +118,13 @@ header .navigation .navigation-items a:hover:before {
         <div class="menu-btn">
             <div class="navigation">
                 <div class="navigation-items">
-                    <a href="#">Home</a>
-                    <a href="#">Discover</a>
-                    <a href="#">Categories</a>
-                    <a href="#">Profile</a>
-                    <a href="#">Awards</a>
-                    <a href="#">Connect</a>
+                <a href="../views/home.php">Home</a>
+                    <a href="../views/discover.php">Discover</a>
+                    <a href="../views/library_copy.php">library</a>
+                    <a href="../views/profile.php">Profile</a>
+                    <a href="../views/awards_page.php">Awards</a>
+                    <a href="../views/connect.php">Connect</a>
+                    <a href="../login/logout.php">logout</a>
                     
                 </div>
             </div>
@@ -134,7 +139,7 @@ header .navigation .navigation-items a:hover:before {
 
                         <div class="col-lg-12 col-12">
                             <div class="text-center mb-5 pb-2">
-                                <h1 class="text-white"> with Fellow Anime Enthusiasts </h1>
+                                <h1 class="text-white" style="color:black;"> Unite with Fellow Anime Enthusiasts </h1>
 
                                 <p class="text-white">Where passion meets friendships</p>
 
@@ -142,161 +147,66 @@ header .navigation .navigation-items a:hover:before {
                             </div>
 
                             <div class="owl-carousel owl-theme">
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
 
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">
-                                            Candice
-                                            <img src="../assets/images/verified.png" class="owl-carousel-verified-image img-fluid" alt="">
-                                        </h4>
 
-                                        <span class="badge">Storytelling</span>
+                            <?php
+                        if ($users !== null) {
+                            foreach ($users as $user) {
+                            echo ' <div class="owl-carousel-info-wrap item">';
+                                    // Check if the profile image exists
+                                if (!empty($user['photo'])) {
+                                    // If the profile image is stored as binary data
+                                    $imageData = base64_encode($user['photo']);
+                                    $src = 'data:image/jpeg;base64,' . $imageData;
+                                    echo "<img src='$src' class='img-fluid' alt='Profile Picture'>";
+                                }
 
-                                        <span class="badge">Business</span>
-                                    </div>
+                                  echo '  <div class="owl-carousel-info">';
+                                   echo '     <h4 class="mb-2">';
+                                        
+                                   echo $user['username'];
+                                     echo'<img src="../assets/images/verified.png" class="owl-carousel-verified-image img-fluid" alt="">';
+                                      echo'  </h4>';
 
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>
-                                            </li>
+                                      echo '<span class="badge">' . $user['email'] . '</span>';
 
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-facebook"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                        
+                                    echo '</div>';
 
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
+                                    echo '<div class="social-share">';
+                                     echo '   <ul class="social-icon">';
+                                     if (!empty($user['twitter'])){
+                                       echo ' <li class="social-icon-item">';
+                                       echo '<a href="' . $user['twitter'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
 
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">
-                                            William
-                                            <img src="../assets/images/verified.png" class="owl-carousel-verified-image img-fluid" alt="">
-                                        </h4>
+                                       echo' </li>';
+                                     }
 
-                                        <span class="badge">Creative</span>
+                                     if (!empty($user['facebook'])){
+                                        echo ' <li class="social-icon-item">';
+                                        echo '<a href="' . $user['twitter'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
+ 
+                                        echo' </li>';
+                                      }
 
-                                        <span class="badge">Design</span>
-                                    </div>
+                                      if (!empty($user['instagram'])){
+                                        echo ' <li class="social-icon-item">';
+                                        echo '<a href="' . $user['twitter'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
+ 
+                                        echo' </li>';
+                                      }
+                                       echo' </ul>';
+                                    echo '</div>';
+                               echo ' </div>';
+                                    }
+                            }
 
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-twitter"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-facebook"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-pinterest"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
-
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">Taylor</h4>
-
-                                        <span class="badge">Modeling</span>
-
-                                        <span class="badge">Fashion</span>
-                                    </div>
-
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-twitter"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-facebook"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-pinterest"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
-
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">Nick</h4>
-
-                                        <span class="badge">Acting</span>
-                                    </div>
-
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-instagram"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-youtube"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
-
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">
-                                            Elsa
-                                            <img src="../assets/images/verified.png" class="owl-carousel-verified-image img-fluid" alt="">
-                                        </h4>
-
-                                        <span class="badge">Influencer</span>
-                                    </div>
-
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-instagram"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-youtube"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="owl-carousel-info-wrap item">
-                                    <img src="../assets/images/cute-smiling-woman-outdoor-portrait.jpg" class="owl-carousel-image img-fluid" alt="">
-
-                                    <div class="owl-carousel-info">
-                                        <h4 class="mb-2">Chan</h4>
-
-                                        <span class="badge">Education</span>
-                                    </div>
-
-                                    <div class="social-share">
-                                        <ul class="social-icon">
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-linkedin"></a>
-                                            </li>
-
-                                            <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-whatsapp"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                                ?>
+                            
+                            
+                            
+                            
+                             </div>
                         </div>
 
                     </div>

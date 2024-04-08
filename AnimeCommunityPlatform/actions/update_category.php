@@ -2,11 +2,11 @@
 include "../settings/connection.php";
 session_start();
 
-// Check if both category ID and anime ID are provided
-if(isset($_GET['id']) && isset($_GET['anime_id'])) {
+//*Receiving all input value from the form
+if ($_SERVER["REQUEST_METHOD"] == "POST"){
     // Retrieve category ID and anime ID
-    $category = $_GET['id'];
-    $animeId = $_GET['anime_id'];
+    $category = $_POST['id'];
+    $animeId = $_POST['anime_id'];
 
 
     //Retrieve the id of the user currently logged in
@@ -31,13 +31,14 @@ if(isset($_GET['id']) && isset($_GET['anime_id'])) {
     if($row['category_id']!= $categoryId) {
         $query = "UPDATE user_animes SET category_id = '$categoryId' WHERE user_id = '$userId' AND anime_id = '$animeId'";
         mysqli_query($connection, $query);
-        header("Location:../views/discover.php");
+        $success_message = 'Anime category was successfully updated!!';
+        echo json_encode(array('success' => $success_message));
         exit();
     }
     //else if they are the same, redirect with a message that the anime is already in that selected category
      else{
-        echo "Anime already in selected category";
-        header("Location:../views/discover.php");
+        $success_message = 'Anime already in selected category!!';
+        echo json_encode(array('success' => $success_message));
         exit();
      }
     }
@@ -69,12 +70,28 @@ if(isset($_GET['id']) && isset($_GET['anime_id'])) {
     }
 
 
-    //Insert the anime into the animes table
-    $query = "INSERT INTO animes (anime_id, image_url, title) VALUES ('$animeId', '$image', '$title')";
-    mysqli_query($connection, $query);
-    echo "Anime added successfully";
-    header("Location:../views/discover.php");
-    exit();
+    //lets first check if the anime id exists in the animes table
+    $query = "SELECT * FROM animes WHERE anime_id = '$animeId'";
+    $result = mysqli_query($connection, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    //if the anime id does not exist in the animes table, add the anime to the database
+    if (empty($row)) {
+        //Insert the anime into the animes table
+        $query = "INSERT INTO animes (anime_id, image_url, title) VALUES ('$animeId', '$image', '$title')";
+        mysqli_query($connection, $query);
+        $success_message = 'Anime added successfuly to category!!';
+        echo json_encode(array('success' => $success_message));
+        exit();
+        
+    }
+
+    $success_message = 'Registration was successful!!';
+     echo json_encode(array('success' => $success_message));
+    
+
+
+    
 
 
 }
