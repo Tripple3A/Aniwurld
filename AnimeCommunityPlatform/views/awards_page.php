@@ -102,10 +102,10 @@ header .navigation .navigation-items a:hover:before {
 
 
     <div class="leaderboard">
-        <img src="images/Photography.jpg" class="theme-img">
+        <img src="../assets/images/winner.jpg" class="theme-img">
         <div class="description">
-            <h3>21st Annual Photographic Competition</h3>
-            <p>Date: 02/24/2022</p>
+            <h3>Spotlight on Anime Enthusiasts</h3>
+            <p>Meet the Top Watchers!</p>
             <input id="search" class="search" placeholder="Search" oninput="search()">
         </div>
             <table>
@@ -113,51 +113,44 @@ header .navigation .navigation-items a:hover:before {
                     <tr>
                         <td></td>
                         <td>
-                            Player
+                            Username
                         </td>
                         <td>
-                            Score
+                            Anime Watched
                         </td>
-                        <td>
-                            Average
-                        </td>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td id="winner">1</td>
-                        <td><img src="images/User1.jpg"><p> Jose Brag</p></td>
-                        <td>239</td>
-                        <td>12.54</td>
-                    </tr>
-                    
-                    <tr>
-                        <td id="runner-up">2</td>
-                        <td><img src="images/User2.jpg"><p> Lily Simons</p></td>
-                        <td>209</td>
-                        <td>10.2</td>
-                    </tr>
-                    
-                    <tr>
-                        <td id="second-runner-up">3</td>
-                        <td><img src="images/User3.jpg"><p> Tom Higgle</p></td>
-                        <td>154</td>
-                        <td>8.4</td>
-                    </tr>
-                    
-                    <tr>
-                        <td>4</td>
-                        <td><img src="images/User4.jpg"><p> Alex Roger</p></td>
-                        <td>100</td>
-                        <td>3.1</td>
-                    </tr>
-                    
-                    <tr>
-                        <td>5</td>
-                        <td><img src="images/User5.jpg"><p> Mavie Ruth</p></td>
-                        <td>82</td>
-                        <td>2.0</td>
-                    </tr>
+                <?php
+                // Include the backend file to fetch data
+                include '../actions/get_top_watchers.php';
+                
+                // Call the function to get top watchers data
+                $topWatchers = getTopWatchers();
+                
+                // Loop through the data and populate the table rows
+foreach ($topWatchers as $index => $user) {
+    echo "<tr>";
+    echo "<td>" . ($index + 1) . "</td>";
+
+    // Check if the profile image exists
+    if (!empty($user['profile_image'])) {
+        // If the profile image is stored as binary data
+        $imageData = base64_encode($user['profile_image']); // Assuming the image data is stored in 'profile_image' column
+        $src = 'data:image/jpeg;base64,' . $imageData;
+        echo "<td><img src='$src' alt='Profile Picture'><p>" . $user['username'] . "</p></td>";
+    } else {
+        // If the profile image is stored as a file path
+        $src = $user['profile_image']; // Assuming the image path is stored in 'profile_image' column
+        echo "<td><img src='$src' alt='Profile Picture'><p>" . $user['username'] . "</p></td>";
+    }
+
+    echo "<td>" . $user['num_anime_watched'] . "</td>";
+    echo "</tr>";
+}
+
+                ?>
                 </tbody>
             </table>
         </div>

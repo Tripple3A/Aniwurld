@@ -1,10 +1,3 @@
-<?php
-// Including the core.php file for session checking
-include '../settings/core.php';
-
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -156,11 +149,18 @@ header .navigation .navigation-items a:hover:before {
 <div class="card-header">Profile Picture</div>
 <div class="card-body text-center">
 
-<img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt>
+<!-- Profile picture preview -->
+<img id="profile-picture-preview" class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt>
+                        <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
+                        <!-- Upload new image button -->
+                        
+                        <button id="upload-image-button" class="btn btn-primary" type="button">Upload new image</button>
+                        <!-- Hidden file input -->
+                        <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
 
-<div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
 
-<button class="btn btn-primary" type="button">Upload new image</button>
+
+
 </div>
 </div>
 </div>
@@ -182,22 +182,118 @@ header .navigation .navigation-items a:hover:before {
 
 <div class="mb-3">
 <label class="small mb-1" for="inputEmailAddress">Email address</label>
-<input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="name@example.com">
+<input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" >
+</div>
+
+
+<div class="mb-3">
+<label class="small mb-1" for="inputTwitterAccount">Twitter account</label>
+<input class="form-control" id="inputTwitterAccount" type="text" placeholder="Enter twitter account" >
+</div>
+
+
+<div class="mb-3">
+<label class="small mb-1" for="inputInstagramAccount">Instagram account</label>
+<input class="form-control" id="inputInstagramAccount" type="text" placeholder="Enter instagram account" >
+</div>
+
+
+<div class="mb-3">
+<label class="small mb-1" for="inputFacebookAccount">Facebook account</label>
+<input class="form-control" id="inputFacebookAccount" type="text" placeholder="Enter facebook account" >
 </div>
 
 
 
-<button class="btn btn-primary" type="button">Save changes</button>
+<button class="btn btn-primary" id="profileupdate" type="button">Save changes</button>
 </form>
 </div>
 </div>
 </div>
 </div>
 </div>
-<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
 	
 </script>
+
+<!--script for uploadiing a profile image-->
+<script type="text/javascript">
+        $(document).ready(function() {
+            // Trigger file input click event when the button is clicked
+            $('#upload-image-button').on('click', function() {
+                $('#profile-picture-input').click();
+            });
+
+            // Function to handle file input change event
+            $('#profile-picture-input').on('change', function(event) {
+                // Get the selected file
+                var file = event.target.files[0];
+                // Create a FileReader object
+                var reader = new FileReader();
+                // Set up a function to run when the file is loaded
+                reader.onload = function(event) {
+                    // Set the source of the profile picture preview to the loaded image data
+                    $('#profile-picture-preview').attr('src', event.target.result);
+                };
+                // Read the file as a data URL (base64 encoded)
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+
+
+<!--submitting the profile form using ajax-->
+<script type="text/javascript">
+    // Trigger AJAX request when the "Save changes" button is clicked
+$('#profileupdate').on('click', function() {
+    // Create FormData object
+    var formData = new FormData();
+
+    // Append form fields to FormData
+    formData.append('username', $('#inputUsername').val());
+    formData.append('twitter', $('#inputTwitterAccount').val());
+    formData.append('facebook', $('#inputFacebookAccount').val());
+    formData.append('instagram', $('#inputInstagramAccount').val());
+    
+    // Append profile picture file
+    var profilePictureFile = $('#profile-picture-input')[0].files[0];
+    if (profilePictureFile) {
+        formData.append('profile_picture', profilePictureFile);
+    }
+
+    
+
+    // Send AJAX request
+    $.ajax({
+        type: 'POST',
+        url: '../actions/update_profile.php',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            
+            try {
+                var data = JSON.parse(response);
+                if (data.success) {
+                    // Show success alert
+                    alert('Profile successfully updated');
+                } else {
+                    // Show error alert with message from the backend
+                    alert('Failed to update profile: ' + data.error);
+                }
+            } catch (e) {
+                // Handle parsing error
+                alert('Error parsing response');
+            }
+        
+        },
+        
+    });
+});
+
+</script>
+
 </body>
 </html>

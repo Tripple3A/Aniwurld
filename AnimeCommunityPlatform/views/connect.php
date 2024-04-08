@@ -159,7 +159,7 @@ header .navigation .navigation-items a:hover:before {
                                     <div class="social-share">
                                         <ul class="social-icon">
                                             <li class="social-icon-item">
-                                                <a href="#" class="social-icon-link bi-twitter"></a>
+                                                <a href="#" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>
                                             </li>
 
                                             <li class="social-icon-item">
