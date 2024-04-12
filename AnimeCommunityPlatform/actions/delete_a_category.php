@@ -7,10 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 
-
-
-
-
 //*Receiving all input value from the form
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
     

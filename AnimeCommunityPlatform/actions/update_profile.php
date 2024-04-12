@@ -38,10 +38,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $updateQuery = "UPDATE profile SET twitter='$twitter', facebook='$facebook', instagram='$instagram', photo='$image' WHERE user_id='$userId'";
                 
 
-
-                //Also update the username in the users table with the new username
+                //Check whether the username is empty or not
+                //Also update the username in the users table with the new username if not empty
+                if(!empty($username)){
                 $updateQuery2 = "UPDATE users SET username='$username' WHERE user_id='$userId'";
                 mysqli_query($connection,  $updateQuery2);
+                }
            
 
                 
@@ -57,8 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $insertQuery = "INSERT INTO profile (user_id, twitter, facebook, instagram, photo) VALUES ('$userId', '$twitter', '$facebook', '$instagram', '$image')";
 
                 //Also update the username in the users table with the new username
+                if(!empty($username)){
                 $updateQuery2 = "UPDATE users SET username='$username' WHERE user_id='$userId'";
                 mysqli_query($connection,  $updateQuery2);
+                }
 
                 if ($connection->query($insertQuery) === TRUE) {
                     // Success
