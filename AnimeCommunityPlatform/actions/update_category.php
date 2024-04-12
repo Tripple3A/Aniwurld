@@ -86,8 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         
     }
 
-    $success_message = 'Registration was successful!!';
-     echo json_encode(array('success' => $success_message));
+    $error_message = 'Error adding to category';
+     echo json_encode(array('error' => $error_message));
     
 
 

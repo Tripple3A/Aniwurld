@@ -124,6 +124,7 @@ header .navigation .navigation-items a:hover:before {
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                     
                 </div>
@@ -143,7 +144,7 @@ header .navigation .navigation-items a:hover:before {
 
                                 <p class="text-white">Where passion meets friendships</p>
 
-                                <a href="#section_2" class="btn custom-btn smoothscroll mt-3">Connect Beyond Screens</a>
+                                <a href="#section_2" class="btn custom-btn smoothscroll mt-3">Update your profile to appear</a>
                             </div>
 
                             <div class="owl-carousel owl-theme">
@@ -152,6 +153,7 @@ header .navigation .navigation-items a:hover:before {
                             <?php
                         if ($users !== null) {
                             foreach ($users as $user) {
+                               
                             echo ' <div class="owl-carousel-info-wrap item">';
                                     // Check if the profile image exists
                                 if (!empty($user['photo'])) {
@@ -159,6 +161,9 @@ header .navigation .navigation-items a:hover:before {
                                     $imageData = base64_encode($user['photo']);
                                     $src = 'data:image/jpeg;base64,' . $imageData;
                                     echo "<img src='$src' class='img-fluid' alt='Profile Picture'>";
+                                }else{
+                                    echo "<img src='../assets/images/defaultimage.jpg' class='img-fluid' alt='Profile Picture'>";
+
                                 }
 
                                   echo '  <div class="owl-carousel-info">';
@@ -184,14 +189,14 @@ header .navigation .navigation-items a:hover:before {
 
                                      if (!empty($user['facebook'])){
                                         echo ' <li class="social-icon-item">';
-                                        echo '<a href="' . $user['twitter'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
+                                        echo '<a href="' . $user['facebook'] . '" class="social-icon-link bi-twitter"><i class="fa fa-facebook-f" style="font-size:24px"></i></a>';
  
                                         echo' </li>';
                                       }
 
                                       if (!empty($user['instagram'])){
                                         echo ' <li class="social-icon-item">';
-                                        echo '<a href="' . $user['twitter'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
+                                        echo '<a href="' . $user['instagram'] . '" class="social-icon-link bi-twitter"><i class="fa fa-twitter" style="font-size:36px"></i></a>';
  
                                         echo' </li>';
                                       }

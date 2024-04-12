@@ -9,6 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $twitter = $_POST['twitter'];
     $facebook = $_POST['facebook'];
     $instagram = $_POST['instagram'];
+    $email = $_POST['email'];
     // Check if file upload is successful
     if (isset($_FILES['profile_picture']) && $_FILES['profile_picture']['error'] === UPLOAD_ERR_OK) {
         // Temporary file path
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // Error in file upload
-        echo json_encode(array("success" => false, "error" => "Error uploading file."));
+        echo json_encode(array("success" => false, "error" => " Upload profile picture"));
     }
 }
 

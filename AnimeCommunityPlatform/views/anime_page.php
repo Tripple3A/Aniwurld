@@ -27,6 +27,7 @@ include '../functions/all_categories_fxn.php';
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                 </div>
             </div>
@@ -146,16 +147,23 @@ $(document).ready(function () {
 
     // Function to update anime category via AJAX
     function updateAnimeCategory(animeId, newCategory) {
-        console.log(animeId);
-        console.log(newCategory);
         
         $.ajax({
             type: "POST",
             url: "../actions/update_category.php",
             data: { anime_id: animeId, id: newCategory },
             success: function(response) {
-                console.log(response);
+                response = JSON.parse(response);
+        
+            if(response.success){
+                
                 alert(response.success);
+            }else{
+        
+            alert(response.error);
+    
+            
+        }
                 
             },
             error: function(xhr, status, error) {

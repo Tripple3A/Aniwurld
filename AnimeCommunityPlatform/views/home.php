@@ -255,6 +255,7 @@ header .navigation .navigation-items a:hover:before {
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                     
                 </div>

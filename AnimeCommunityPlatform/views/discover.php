@@ -108,6 +108,7 @@ form {
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                     
                 </div>
@@ -222,6 +223,13 @@ function getAiringAnime() {
         .then(animeList => displayAnime(animeList))
         .catch(error => console.error("Error fetching airing anime:", error));
 }
+
+
+// Call one of the category-fetching functions when the page loads
+window.onload = function() {
+        // You can choose which category to display by default here
+        getPopularAnime(); // For example, displaying popular anime by default
+    };
 
 </script>
 </body>

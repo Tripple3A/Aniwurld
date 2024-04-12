@@ -7,10 +7,6 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 
-
-
-
-
 //*Receiving all input value from the form
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
     $errors = array();
@@ -28,14 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     //would need to ensure user does not submit empty review
     if(empty($review)){
-        array_push($errors, "Please enter a review");
-    }
-
-
-
-    //would need tp validate that the review is not a number
-    if(is_numeric($review)){
-        array_push($errors, "Review cannot be a number");
+        $error_message = 'Cannot submit empty review';
+        echo json_encode(array('error' => $error_message));
+        exit();
+    }elseif (!preg_match("/^[a-zA-Z\s]+$/", $review)) {
+        $error_message = 'Review cannot be numeric';
+        echo json_encode(array('error' => $error_message));
+        exit();
     }
 
     

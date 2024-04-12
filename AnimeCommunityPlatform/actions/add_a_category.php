@@ -20,18 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $newCategory = mysqli_real_escape_string($connection, $_POST['add-text']);
     
-
-
     //would need to ensure user does not submit empty review
     if(empty($newCategory)){
-        array_push($errors, "Cannot submit empty category");
-    }
-
-
-
-    //would need tp validate that the review is not a number
-    if(is_numeric($newCategory)){
-        array_push($errors, "Category cannot be a number");
+        $error_message = 'Cannot submit empty category';
+        echo json_encode(array('error' => $error_message));
+        exit();
+    }elseif (!preg_match("/^[a-zA-Z\s]+$/", $newCategory)) {
+        $error_message = 'Category cannot be numeric';
+        echo json_encode(array('error' => $error_message));
+        exit();
     }
 
     
@@ -54,10 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         // If insertion failed, return error message
         echo json_encode(array('error' => 'Failed to add category'));
     }
-} else {
-    // If there are errors, return error messages
-    echo json_encode(array('errors' => $errors));
-}
+} 
 }
 
     

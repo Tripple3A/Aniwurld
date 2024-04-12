@@ -489,6 +489,7 @@ header .navigation .navigation-items a:hover:before {
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                 </div>
             </div>
@@ -504,14 +505,19 @@ header .navigation .navigation-items a:hover:before {
                 <ul>
                     <?php
                     // Loop through categories retrieved from the database
-                    foreach ($var_data as $category) {
-                        echo '<div class="category-title" data-category="' . $category['category'] . '">';
-                        echo '<li>' . $category['category'] . '</li>';
-                        // Modify the delete icon to include a data attribute for category name -->
-                        echo '<span><a class="delete" title="Delete" data-toggle="tooltip" href="#" data-category="' . $category['category'] . '"><i class="fa fa-trash"></i></a></span>';
+                    $first_category = true; // Initialize a flag to track the first category
+        foreach ($var_data as $category) {
+            // Add active class to the first category by default
+            $active_class = $first_category ? 'active' : '';
+            echo '<div class="category-title ' . $active_class . '" data-category="' . $category['category'] . '">';
+            echo '<li>' . $category['category'] . '</li>';
+            // Modify the delete icon to include a data attribute for category name -->
+            echo '<span><a class="delete" title="Delete" data-toggle="tooltip" href="#" data-category="' . $category['category'] . '"><i class="fa fa-trash"></i></a></span>';
 
-                        echo '</div>';
-                    }
+            echo '</div>';
+            // Set the flag to false after the first category to ensure only one category gets the active class
+            $first_category = false;
+        }
                     ?>
 
                 <div class = "category-add" id = "adding-category">
@@ -537,6 +543,7 @@ header .navigation .navigation-items a:hover:before {
         <textarea id="review-text" name="review-text" placeholder="Write your review"></textarea>
         <input type="hidden" id="anime-id" name="anime-id" value="">
         <input type="submit" name="submit-review">
+        <input type="submit" name="close">
     </form>
 </div>
 
@@ -578,6 +585,9 @@ header .navigation .navigation-items a:hover:before {
                 fetchAnimeByCategory(category); // Fetch anime details based on category
             });
 
+            // Trigger click event on the first category after the document is ready
+    $('.category-title:first').trigger('click');
+
 
             // Change event for category dropdown items
         $(document).on('click', '.dropdown-item', function() {
@@ -595,14 +605,24 @@ header .navigation .navigation-items a:hover:before {
             type: "POST",
             url: "../actions/change_category.php",
             data: { anime_id: animeId, id: newCategory },
+            
             success: function(response) {
-                console.log(response);
+                response = JSON.parse(response);
+        
+            if(response.success){
+                alert(response.success); 
+                
                 // If category updated successfully, fetch updated anime list
                 fetchAnimeByCategory($('.category-title.active').data('category'));
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
             }
+            else{
+        
+            alert(response.error);
+        
+                
+            }
+        },
+            
         });
     }
         });
@@ -626,22 +646,21 @@ $(document).on('submit', '#submit-review-form', function(e) {
     
    e.preventDefault();
    var formData = $(this).serialize(); // Serialize form data
+   console.log(formData);
     $.ajax({
         type: "POST",
         url: "../actions/submit_review.php",
         data: formData,
        success: function(response) {
+        response = JSON.parse(response);
+        
+        if(response.success){
+            
             $('#review-form').hide(); // Hide review form after submission
-        },
-        error: function(xhr, status, error) {
-           // Optionally, handle error response
-           console.error(xhr.responseText);
-        }
-    });
+            alert(response.success); 
 
-
-    // Fetch updated anime details and reviews HTML
-    var category = $('.category-title.active').data('category'); // Get the active category
+            // Fetch updated anime details and reviews HTML
+        var category = $('.category-title.active').data('category'); // Get the active category
         $.ajax({
             type: "GET",
             url: "../actions/get_each_category.php",
@@ -653,6 +672,18 @@ $(document).on('submit', '#submit-review-form', function(e) {
                 console.error(xhr.responseText);
             }
         });
+    }else{
+        
+        alert(response.error);
+        $('#review-form').hide();
+        
+
+    }
+        },
+        
+    });
+
+    
     });
 
     </script>
@@ -664,21 +695,37 @@ $(document).on('submit', '#submit-review-form', function(e) {
     $(document).on('click', '.delete-btn', function() {
     var animeId = $(this).data('animeid');
     // Send AJAX request to delete the anime from the category
+    var confirmed = confirm("Are you sure you want to delete this category"); // Prompt confirmation
+    if (confirmed) {
     $.ajax({
         type: "POST",
         url: "../actions/delete_category.php",
         data: { anime_id: animeId },
         success: function(response) {
-            // Remove the corresponding anime content from the page
-            
-            $('#anime-' + animeId).remove();
 
-            console.log("Anime deleted from category successfully");
+            response = JSON.parse(response);
+        
+            if(response.success){
+                $('#anime-' + animeId).remove();
+                alert(response.success); 
+            
+            }else{
+        
+        alert(response.error);
+    
+            
+        }
+
+            
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
+}else {
+        // Do nothing if not confirmed
+        return false;
+    }
 });
 
     </script>
@@ -715,13 +762,23 @@ $(document).on('submit', '#add-form', function(e) {
             url: "../actions/add_a_category.php",
             data: formData,
             success: function(response) {
+                response = JSON.parse(response);
+        
+                if(response.name){
                 // Hide category form after submission
                 $('#add-category-form').hide();
                 // Parse JSON response to get the newly added category data
-                console.log(response);
-                var newCategory = JSON.parse(response);
+                alert("Category was added successfully");
+                var newCategory = response;
                 // Dynamically append the new category to the category list
                 $('.category-head ul').append('<div class="category-title" data-category="' + newCategory.name + '"><li>' + newCategory.name + '</li><span><a class="delete" title="Delete" data-toggle="tooltip" href="#" data-category="' + newCategory.name + '"><i class="fa fa-trash"></i></a></span></div>');
+            }else{
+        
+        alert(response.error);
+        $('#add-category-form').hide();
+    
+            
+        }
 
             },
             error: function(xhr, status, error) {
@@ -741,21 +798,38 @@ $(document).on('submit', '#add-form', function(e) {
 $(document).on('click', '.delete', function(e) {
     e.preventDefault();
     var category = $(this).data('category'); // Get the category name
+    var confirmed = confirm("Are you sure you want to delete this category"); // Prompt confirmation
     // Send AJAX request to delete the category
+    if (confirmed) {
     $.ajax({
         type: "POST",
         url: "../actions/delete_a_category.php",
         data: { category: category }, // Send category name to backend
         success: function(response) {
-            console.log(response);
+            response = JSON.parse(response);
+        
+                if(response.success){
+            alert(response.success);
             // Remove the deleted category from the frontend
             $('.category-title[data-category="' + category + '"]').remove();
-            console.log("Category deleted successfully");
+            
+                }else{
+        
+        alert(response.error);
+        $('#add-category-form').hide();
+    
+            
+        }
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
         }
     });
+}
+else {
+        // Do nothing if not confirmed
+        return false;
+    }
 });
 
 

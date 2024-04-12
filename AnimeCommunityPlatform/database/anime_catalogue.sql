@@ -125,10 +125,10 @@ CREATE TABLE `profile` (
 -- Table structure for table `animes`
 --
 
-CREATE TABLE animes (
-    anime_id INT PRIMARY KEY,
-    image_url VARCHAR(255),
-    title VARCHAR(255)
+CREATE TABLE `animes` (
+    `anime_id` INT PRIMARY KEY,
+    `image_url` VARCHAR(255),
+    `title` VARCHAR(255)
 );
 
 

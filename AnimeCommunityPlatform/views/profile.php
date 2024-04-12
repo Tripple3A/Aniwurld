@@ -1,3 +1,9 @@
+<?php
+
+include '../settings/core.php';
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,6 +139,7 @@ header .navigation .navigation-items a:hover:before {
                     <a href="../views/profile.php">Profile</a>
                     <a href="../views/awards_page.php">Awards</a>
                     <a href="../views/connect.php">Connect</a>
+                    <a href="../views/quiz.php">Quiz</a>
                     <a href="../login/logout.php">logout</a>
                     
                 </div>
@@ -174,7 +181,7 @@ header .navigation .navigation-items a:hover:before {
 
 <div class="mb-3">
 <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-<input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="username">
+<input class="form-control" id="inputUsername" type="text" placeholder="Update username">
 </div>
 
 
@@ -183,7 +190,7 @@ header .navigation .navigation-items a:hover:before {
 
 <div class="mb-3">
 <label class="small mb-1" for="inputEmailAddress">Email address</label>
-<input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" >
+<input class="form-control" id="inputEmailAddress" type="email" placeholder="Update email address" >
 </div>
 
 
@@ -254,6 +261,7 @@ $('#profileupdate').on('click', function() {
 
     // Append form fields to FormData
     formData.append('username', $('#inputUsername').val());
+    formData.append('email', $('#inputEmailAddress').val());
     formData.append('twitter', $('#inputTwitterAccount').val());
     formData.append('facebook', $('#inputFacebookAccount').val());
     formData.append('instagram', $('#inputInstagramAccount').val());

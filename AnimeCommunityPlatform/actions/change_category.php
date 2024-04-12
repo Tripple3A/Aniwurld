@@ -31,11 +31,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if($row['category_id']!= $categoryId) {
         $query = "UPDATE user_animes SET category_id = '$categoryId' WHERE user_id = '$userId' AND anime_id = '$animeId'";
         mysqli_query($connection, $query);
-        echo json_encode(array("status" => "success"));
+        $success_message = 'Anime category has been successfully updated';
+        echo json_encode(array('success' => $success_message));
+        exit();
     }
     //else if they are the same, redirect with a message that the anime is already in that selected category
      else{
-        echo json_encode(array("status" => "error"));
+        $error_message = 'Anime is already in selected category!!';
+        echo json_encode(array('error' => $success_message));
+        exit();
      }
     }
 
@@ -43,7 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 else{
     // If request method is not POST, send error response
-    echo json_encode(array("status" => "error"));
+    $error_message = 'Error executing the request!!';
+    echo json_encode(array('success' => $error_message));
 }
 
 
