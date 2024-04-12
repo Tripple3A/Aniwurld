@@ -543,7 +543,7 @@ header .navigation .navigation-items a:hover:before {
         <textarea id="review-text" name="review-text" placeholder="Write your review"></textarea>
         <input type="hidden" id="anime-id" name="anime-id" value="">
         <input type="submit" name="submit-review">
-        <input type="submit" name="close">
+        
     </form>
 </div>
 
