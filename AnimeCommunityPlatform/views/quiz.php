@@ -303,11 +303,24 @@ let correctAnswer = "", correctScore = askedCount = 0, totalQuestion = 10;
 // load question from API
 async function loadQuestion(){
     const APIUrl = 'https://opentdb.com/api.php?amount=10&category=31&difficulty=hard&type=multiple';
-    const result = await fetch(`${APIUrl}`)
-    const data = await result.json();
-    _result.innerHTML = "";
-    showQuestion(data.results[0]);
+    try {
+        const result = await fetch(APIUrl);
+        const data = await result.json();
+        if (data.results && data.results.length > 0) {
+            _result.innerHTML = "";
+            showQuestion(data.results[0]);
+        } else {
+            console.error("No results found in API response");
+            // Continue to the next call
+            setTimeout(loadQuestion, 1000); // Retry after 1 second
+        }
+    } catch (error) {
+        console.error("Error fetching question:", error);
+        // Continue to the next call
+        setTimeout(loadQuestion, 1000); // Retry after 1 second
+    }
 }
+
 
 // event listeners
 function eventListeners(){
